@@ -16,8 +16,8 @@ session = cnx.session()
 
 #session = get_active_session()
 my_dataframe = session.table("smoothies.public.fruit_options").select(col('FRUIT_NAME'),col('SEARCH_ON'))
-st.dataframe(data=my_dataframe, use_container_width = True)
-st.stop()
+#st.dataframe(data=my_dataframe, use_container_width = True)
+#st.stop()
 
 ingredients_lst = st.multiselect('Choose up to 5 ingredients:', my_dataframe[['fruit_name']], max_selections =5)
 
@@ -28,8 +28,9 @@ if ingredients_lst:
         ingredients_string += fruit_chosen + ' ' 
         search_on=pd_df.loc[pd_df['FRUIT_NAME'] == fruit_chosen, 'SEARCH_ON'].iloc[0]
         st.write('The search value for ', fruit_chosen,' is ', search_on, '.')
-    
-        fruityvice_response = requests.get("https://fruityvice.com/api/fruit/watermelon")
+
+        st.subheader(fruit_chosen + 'Nutrition Informaton')
+        fruityvice_response = requests.get("https://fruityvice.com/api/fruit/watermelon" +fruit_chosen)
         fv_dc = st.dataframe(data=fruityvice_response.json(), use_container_width=True) 
     
     # Adjust the insert statement to specify the columns
