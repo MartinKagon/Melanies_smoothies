@@ -37,3 +37,6 @@ if ingredients_lst:
             st.error(f"An error occurred: {e}")
 else:
     st.write("Please select at least one ingredient.")
+import requests
+fruityvice_response = requests.get("https://fruityvice.com/api/fruit/watermelon")
+st.text(fruityvice_response)
