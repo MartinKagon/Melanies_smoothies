@@ -14,29 +14,8 @@ st.write("The name on your smoothie will be: ", name_on_order)
 my_dataframe = session.table("smoothies.public.fruit_options").select(col('fruit_name'))
 #st.dataframe(data=my_dataframe, use_container_width=True)
 
-if my_dataframe:
-
-    og_dataset = session.table("Smoothies.public.orders")
-    edited_dataset = session.create_dataframe(editable_df)
-
-    try:
-        og_dataset.merge(edited_dataset,
-                         (og_dataset['order_uid'] == edited_dataset['order_uid']),
-                      [when_matched().update({'ORDER_FILLED': edited_dataset['ORDER_FILLED']})])
-        st.success('Someone clicked the button', icon = '👍')
-    except:
-        st.write('Something went wrong')
-
-else:
-    st.success('There are no pending orders right now' , icon = '👍')
-
-
 cnx = st.connection("snowflake")
 session = cnx.session()
-
-
-editable_df = st.experimental_data_editor(my_dataframe)
-submitted = st.button('Submit')
 
 ingredients_lst = st.multiselect('Choose upto 5 ingredients: ', my_dataframe, max_selections = 5)
 
