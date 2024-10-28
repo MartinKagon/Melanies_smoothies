@@ -1,4 +1,3 @@
-st.success('Someone clicked the button', icon = '👍')
 # Import python packages
 import streamlit as st
 streamlit.title('My parents new healthy diner')
