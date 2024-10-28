@@ -3,7 +3,6 @@ st.success('Someone clicked the button', icon = '👍')
 import streamlit as st
 streamlit.title('My parents new healthy diner')
 from snowflake.snowpark.functions import col
-from snowflake.snowpark.context import get_active_session
 import requests
 
 # Write directly to the app
@@ -12,10 +11,10 @@ st.write("Choose the fruits you want in your smoothie")
 
 name_on_order = st.text_input("Name on Smoothie")
 st.write("The name on your smoothie will be: ", name_on_order)
+my_dataframe = session.table("smoothies.public.fruit_options").select(col('fruit_name'))
+#st.dataframe(data=my_dataframe, use_container_width=True)
 
-editable_df = st.experimental_data_editor(my_dataframe)
-submitted = st.button('Submit')
-if submitted:
+if my_dataframe:
 
     og_dataset = session.table("Smoothies.public.orders")
     edited_dataset = session.create_dataframe(editable_df)
@@ -34,8 +33,10 @@ else:
 
 cnx = st.connection("snowflake")
 session = cnx.session()
-my_dataframe = session.table("smoothies.public.fruit_options").select(col('fruit_name'))
-#st.dataframe(data=my_dataframe, use_container_width=True)
+
+
+editable_df = st.experimental_data_editor(my_dataframe)
+submitted = st.button('Submit')
 
 ingredients_lst = st.multiselect('Choose upto 5 ingredients: ', my_dataframe, max_selections = 5)
 
